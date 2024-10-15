@@ -1,3 +1,0 @@
-[submodule "backend/api"]
-	path = backend/api
-	url = https://github.com/DinoDevs/GladiatusPlayersStatsAPI.git
