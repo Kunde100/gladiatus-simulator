@@ -21,7 +21,7 @@ type FormData struct {
 
 
 func main() {
-	var DEBUG = true
+	var DEBUG = false 
     r := gin.Default()
 
     // Load HTML templates
