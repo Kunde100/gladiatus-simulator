@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Creator</title>
+</head>
+<body>
+    <h1>Create JSON</h1>
+    <form action="/generate" method="POST">
+        <h2>Attacker</h2>
+        <label for="attacker_name">Name:</label>
+        <input type="text" id="attacker_name" name="attacker_name" required><br>
+
+        <label for="attacker_country">Country:</label>
+        <select id="attacker_country" name="attacker_country" required><br>
+			<option value="cz">cz</option>
+		</select><br>
+
+        <h2>Defender</h2>
+        <label for="defender_name">Name:</label>
+        <input type="text" id="defender_name" name="defender_name" required><br>
+
+        <label for="defender_country">Country:</label>
+		<select id="defender_country" name="defender_country" required><br>
+			<option value="cz">cz</option>
+		</select><br>
+
+        <h2>Options</h2>
+        <label for="life_mode">Life Mode:</label>
+        <select id="life_mode" name="life_mode" required>
+			<option value="current">current</option>
+			<option value="full">full</option>
+		</select><br>
+
+        <h2>Server Number</h2>
+        <label for="server_number">Server Number:</label>
+        <input type="text" id="server_number" name="server_number" required><br>
+
+        <button type="submit">Generate JSON</button>
+    </form>
+</body>
+</html>
+

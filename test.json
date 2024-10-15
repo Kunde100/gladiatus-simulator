@@ -1,0 +1,18 @@
+{
+	"attacker": {
+		"country": "cz",
+		"server": "55",
+		"name": "JablecnaStava"
+	},
+	"defender": {
+		"country": "cz",
+		"server": "55",
+		"name": "XRSSorbon"
+	},
+	"options": {
+		"life-mode": "current",
+		"simulates": 100
+		}
+		
+}
+
