@@ -37,7 +37,7 @@
 	*/
 		// Load request player data library
 		// https://github.com/DinoDevs/GladiatusPlayerStatsAPI
-		require_once('api/request_playerData.php');
+		require_once('libs/request_playerData.php');
 	
 	
 	/*
