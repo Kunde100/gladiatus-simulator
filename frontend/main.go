@@ -38,7 +38,6 @@ type Details struct {
 }
 
 func main() {
-	var DEBUG = false 
     r := gin.Default()
 
     // Load HTML templates
@@ -93,28 +92,12 @@ func main() {
 			c.String(http.StatusInternalServerError, "Error marshalling JSON: %s", err.Error())
 			return
 		}
-
-		if DEBUG  {
-			resp, err := http.Post("http://localhost:8081/api.php", "application/json", bytes.NewBuffer(jsonBytes))
-			if err != nil {
-				c.String(http.StatusInternalServerError, "Error calling API: %s", err.Error())
-				return
-			}
-		defer resp.Body.Close()
-
-		var responseBody bytes.Buffer
-		_, err = responseBody.ReadFrom(resp.Body)
-		if err != nil {
-			c.String(http.StatusInternalServerError, "Error reading response body: %s", err.Error())
-			return
-		}
-
-		c.HTML(http.StatusOK, "response.html", gin.H{
-			"status": resp.Status,
-			"body":   responseBody.String(),
-		})
-		} else {
-		url := os.Getenv("BACKEND_URL")
+		
+		url := "http://localhost:8080"
+	    envUrl, exists := os.LookupEnv("BACKEND_URL")
+	    if exists {
+	        url = envUrl
+	    }
 		resp, err := http.Post(url+"/api.php", "application/json", bytes.NewBuffer(jsonBytes))
 		if err != nil {
 			c.String(http.StatusInternalServerError, "Error calling API: %s", err.Error())
@@ -127,20 +110,18 @@ func main() {
 		if err != nil {
 			c.String(http.StatusInternalServerError, "Error reading response body: %s", err.Error())
 			return
+
 		}
-		
+		var response string
+		response = responseBody.String()
+		log.Println("Full response: ", response)
 
-		var test string
-		test = responseBody.String()
-		log.Println("Full response: ", test)
-
-		parsedResponse := parseResponse(test)
+		parsedResponse := parseResponse(response)
 		c.HTML(http.StatusOK, "response.html", gin.H{
 			"winChance": parsedResponse.WinChance,
 			"loseChance": parsedResponse.LoseChance,
 			"drawChance": parsedResponse.DrawChance,
 		})
-		}
     })
 
 	r.LoadHTMLGlob("templates/*")
@@ -149,12 +130,9 @@ func main() {
 }
 
 
-func parseResponse(test string) *Response {
-	//response comes in this format null{"win-chance":14.8,"lose-chance":85.2,"draw-chance":0,"details":{"fights":1000,"wins":148,"loses":852,"draws":0}}
-
-	body := test 
+func parseResponse(response string) *Response {
 	
-	trimmedResponse := strings.TrimPrefix(body, "null")
+	trimmedResponse := strings.TrimPrefix(response, "null")
 
 	var apiResponse Response
 	err := json.Unmarshal([]byte(trimmedResponse), &apiResponse)
@@ -165,7 +143,6 @@ func parseResponse(test string) *Response {
 	fmt.Printf("Win Chance: %.2f", apiResponse.WinChance)
 	fmt.Printf("Lose Chance: %.2f", apiResponse.LoseChance)
 	fmt.Printf("Draw Chance: %.2f", apiResponse.DrawChance)
-
 
 	return &apiResponse
 }
