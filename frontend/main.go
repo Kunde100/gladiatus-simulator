@@ -15,11 +15,12 @@ import (
 type FormData struct {
     AttackerName     string `form:"attacker_name"`
     AttackerCountry  string `form:"attacker_country"`
+	AttackerServer   int    `form:"attacker_server"`
     DefenderName     string `form:"defender_name"`
     DefenderCountry  string `form:"defender_country"`
+	DefenderServer   int    `form:"defender_server"`
     LifeMode         string `form:"life_mode"`
     Simulates        int    `form:"simulates"`
-	ServerNumber     int    `form:"server_number"`
 }
 
 type Response struct {
@@ -68,12 +69,12 @@ func main() {
             "attacker": map[string]interface{}{
                 "country": formData.AttackerCountry,
                 "name":    formData.AttackerName,
-				"server":  formData.ServerNumber,
+				"server":  formData.AttackerServer,
             },
             "defender": map[string]interface{}{
                 "country": formData.DefenderCountry,
                 "name":    formData.DefenderName,
-				"server":  formData.ServerNumber,
+				"server":  formData.DefenderServer,
             },
             "options": map[string]interface{}{
                 "life-mode": formData.LifeMode,
@@ -83,7 +84,9 @@ func main() {
 		
 		log.Println("Request:")
 		log.Println(formData.AttackerName)
+		log.Println(formData.AttackerServer)
 		log.Println(formData.DefenderName)
+		log.Println(formData.DefenderServer)
 
 		jsonBytes, err := json.Marshal(jsonData)
 		if err != nil {
@@ -129,6 +132,7 @@ func main() {
 
 		var test string
 		test = responseBody.String()
+		log.Println("Full response: ", test)
 
 		parsedResponse := parseResponse(test)
 		c.HTML(http.StatusOK, "response.html", gin.H{
