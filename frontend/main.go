@@ -32,9 +32,7 @@ func main() {
     })
     r.LoadHTMLGlob("templates/*")
 
-	r.GET("static/style.css", func(c *gin.Context) {
-		c.File("static/style.css")
-	})
+	r.Static("static/style.css", ".static/") 
 
     // Serve the form
     r.GET("/", func(c *gin.Context) {
