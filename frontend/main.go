@@ -80,6 +80,10 @@ func main() {
                 "simulates": "1000",
             },
         }
+		
+		log.Println("Request:")
+		log.Println(formData.AttackerName)
+		log.Println(formData.DefenderName)
 
 		jsonBytes, err := json.Marshal(jsonData)
 		if err != nil {
@@ -128,7 +132,6 @@ func main() {
 
 		parsedResponse := parseResponse(test)
 		c.HTML(http.StatusOK, "response.html", gin.H{
-			"status": resp.Status,
 			"winChance": parsedResponse.WinChance,
 			"loseChance": parsedResponse.LoseChance,
 			"drawChance": parsedResponse.DrawChance,
