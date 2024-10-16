@@ -14,7 +14,7 @@ RUN apk add --no-cache ca-certificates
 WORKDIR /app
 COPY --from=builder /app/main .
 COPY --from=builder /app/templates ./templates
-COPY --from=builder /app/static ./static
+COPY --from=builder /app/assets ./assets
 
 EXPOSE 8000
 
