@@ -7,6 +7,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"os"
+	"log"
+	"fmt"
+	"strings"
 )
 
 type FormData struct {
@@ -19,6 +22,19 @@ type FormData struct {
 	ServerNumber     int    `form:"server_number"`
 }
 
+type Response struct {
+	WinChance float64 `json:"win-chance"`
+	LoseChance float64 `json:"lose-chance"`
+	DrawChance float64 `json:"draw-chance"`
+	Details Details `json:"details"`
+}
+
+type Details struct {
+	Fights int `json:"fights"`
+	Wins int `json:"wins"`
+	Loses int `json:"loses"`
+	Draws int `json:"draws"`
+}
 
 func main() {
 	var DEBUG = false 
@@ -105,10 +121,17 @@ func main() {
 			c.String(http.StatusInternalServerError, "Error reading response body: %s", err.Error())
 			return
 		}
+		
 
+		var test string
+		test = responseBody.String()
+
+		parsedResponse := parseResponse(test)
 		c.HTML(http.StatusOK, "response.html", gin.H{
 			"status": resp.Status,
-			"body":   responseBody.String(),
+			"winChance": parsedResponse.WinChance,
+			"loseChance": parsedResponse.LoseChance,
+			"drawChance": parsedResponse.DrawChance,
 		})
 		}
     })
@@ -117,4 +140,28 @@ func main() {
 
     r.Run(":8000") 
 }
+
+
+func parseResponse(test string) *Response {
+	//response comes in this format null{"win-chance":14.8,"lose-chance":85.2,"draw-chance":0,"details":{"fights":1000,"wins":148,"loses":852,"draws":0}}
+
+	body := test 
+	
+	trimmedResponse := strings.TrimPrefix(body, "null")
+
+	var apiResponse Response
+	err := json.Unmarshal([]byte(trimmedResponse), &apiResponse)
+	if err != nil {
+		log.Println("Error unmarshaling json:", err)
+	}
+
+	fmt.Printf("Win Chance: %.2f", apiResponse.WinChance)
+	fmt.Printf("Lose Chance: %.2f", apiResponse.LoseChance)
+	fmt.Printf("Draw Chance: %.2f", apiResponse.DrawChance)
+
+
+	return &apiResponse
+}
+
+
 
