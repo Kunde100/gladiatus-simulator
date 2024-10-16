@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON Creator</title>
+    <title>Gladiatus Simulator</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Create JSON</h1>
+    <h1 class="text-4xl font-bold text-center">Gladiatus Simulator</h1>
+	<div class="flex">
+	<div class="flex-1 p-4 px-4">
     <form action="/generate" method="POST">
-        <h2>Attacker</h2>
+        <h2 class="text-2xl font-bold">Attacker</h2>
         <label for="attacker_name">Name:</label>
         <input type="text" id="attacker_name" name="attacker_name" required><br>
 
@@ -20,7 +24,9 @@
 		<label for="server_number">Server Number:</label>
         <input type="text" id="server_number" name="server_number" required><br>
 
-        <h2>Defender</h2>
+	</div>
+	<div class="flex-1 p-4 px-4">
+        <h2 class="text-2xl font-bold">Defender</h2>
         <label for="defender_name">Name:</label>
         <input type="text" id="defender_name" name="defender_name" required><br>
 
@@ -32,14 +38,20 @@
 		<label for="server_number">Server Number:</label>
         <input type="text" id="server_number" name="server_number" required><br>
 
-        <h2>Options</h2>
+	</div>
+	</div>
+	<div class="container mx-auto">
+        <h2 class="text-2xl font-bold">Options</h2>
         <label for="life_mode">Life Mode:</label>
         <select id="life_mode" name="life_mode" required>
 			<option value="current">current</option>
 			<option value="full">full</option>
 		</select><br>
+	</div>
 
-        <button type="submit">Simulate Battle</button>
+	<div class="container mx-auto">
+        <button class="text-slate-500 bg-slate-400 rounded py-2 px-4" type="submit">Simulate Battle</button>
+	<div class="container mx-auto">
     </form>
 </body>
 </html>

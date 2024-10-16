@@ -32,6 +32,10 @@ func main() {
     })
     r.LoadHTMLGlob("templates/*")
 
+	r.GET("static/style.css", func(c *gin.Context) {
+		c.File("static/style.css")
+	})
+
     // Serve the form
     r.GET("/", func(c *gin.Context) {
         c.HTML(http.StatusOK, "form.html", nil)
