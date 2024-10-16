@@ -7,19 +7,19 @@
 	<script src="https://cdn.tailwindcss.com"></script>
 	<link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="bg-slate-200 leading-loose">
+<body class="bg-slate-200 leading-loose space-y-10">
     <h1 class="text-4xl font-bold text-center">Gladiatus Simulator</h1>
-	<div class="grid grid-cols-2 gap-4">
+	<div class="grid grid-cols-2 gap-4 ">
 
-	<div id="attacker" class="container mx-auto text-center">
+	<div id="attacker" class="container mx-auto text-right pr-10">
     <form action="/generate" method="POST">
         <h2 class="text-2xl font-bold">Attacker</h2>
         <label for="attacker_name">Name:</label>
-        <input class="leading-relaxed" type="text" id="attacker_name" name="attacker_name" required><br>
+        <input class="leading-relaxed rounded-lg" type="text" id="attacker_name" name="attacker_name" required><br>
 
 
 		<label for="attacker_server">Server Number:</label>
-        <select class="min-w-48 text-center bg-slate-400"id="attacker_server" name="attacker_server" required><br>
+        <select class="min-w-48 text-center bg-slate-400 rounded-lg" id="attacker_server" name="attacker_server" required><br>
 			<option value="50">Server 50</option>
 			<option value="51">Server 51</option>
 			<option value="52">Server 52</option>
@@ -29,20 +29,19 @@
 		</select><br>
 
         <label for="attacker_country">Country:</label>
-        <select class="bg-slate-400 min-w-12 text-center" id="attacker_country" name="attacker_country" required><br>
+        <select class="bg-slate-400 min-w-12 text-center rounded-lg" id="attacker_country" name="attacker_country" required><br>
 			<option value="cz">cz</option>
 		</select><br>
 	</div>
 
-
-	<div id="defender" class="container mx-auto text-center">
+	<div id="defender" class="container mx-auto text-left pl-10">
         <h2 class="text-2xl font-bold">Defender</h2>
         <label for="defender_name">Name:</label>
-        <input class="leading-relaxed" type="text" id="defender_name" name="defender_name" required><br>
+        <input class="leading-relaxed rounded-lg" type="text" id="defender_name" name="defender_name" required><br>
 
 
 		<label for="defender_server">Server Number:</label>
-		<select class="min-w-48 text-center bg-slate-400" id="defender_server" name="defender_server" required><br>
+		<select class="min-w-48 text-center bg-slate-400 rounded-lg" id="defender_server" name="defender_server" required><br>
 			<option value="50">Server 50</option>
 			<option value="51">Server 51</option>
 			<option value="52">Server 52</option>
@@ -52,7 +51,7 @@
 		</select><br>
 
         <label for="defender_country">Country:</label>
-		<select class="bg-slate-400 min-w-12 text-center" id="defender_country" name="defender_country" required><br>
+		<select class="bg-slate-400 min-w-12 text-center rounded-lg" id="defender_country" name="defender_country" required><br>
 			<option value="cz">cz</option>
 		</select><br>
 	</div>
@@ -62,13 +61,13 @@
 	<div id="options" class="container mx-auto">
         <h2 class="text-2xl font-bold">Options</h2>
         <label for="life_mode">Life Mode:</label>
-        <select class="bg-slate-400" id="life_mode" name="life_mode" required><br>
+        <select class="bg-slate-400 rounded-lg" id="life_mode" name="life_mode" required><br>
 			<option value="current">current</option>
 			<option value="full">full</option>
 		</select><br>
 	</div>
 	<div id="button" class="container mx-auto ">
-        <button class="text-slate-500 bg-slate-400 rounded py-2 px-4" type="submit">Simulate Battle</button>
+        <button class="text-slate-950 bg-amber-300 hover:bg-amber-400 rounded-full py-2 px-4" type="submit">Simulate Battle</button>
 	</div>
 	</div>
     </form>
