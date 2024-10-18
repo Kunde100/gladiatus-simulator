@@ -10,6 +10,8 @@ import (
 	"log"
 	"fmt"
 	"strings"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 )
 
 type FormData struct {
@@ -37,8 +39,12 @@ type Details struct {
 	Draws int `json:"draws"`
 }
 
+
 func main() {
     r := gin.Default()
+
+	store := cookie.NewStore([]byte("secret"))
+	r.Use(sessions.Sessions("session", store))
 
     // Load HTML templates
     r.SetFuncMap(template.FuncMap{
@@ -52,11 +58,22 @@ func main() {
 
     // Serve the form
     r.GET("/", func(c *gin.Context) {
-        c.HTML(http.StatusOK, "form.html", nil)
+		session := sessions.Default(c)
+		attackerName := session.Get("attacker_name")
+		defenderName := session.Get("defender_name")
+		attackerServer := session.Get("attacker_server")
+		defenderServer := session.Get("defender_server")
+        c.HTML(http.StatusOK, "form.html", gin.H{
+			"AttackerName": attackerName,
+			"DefenderName": defenderName,
+			"AttackerServer": attackerServer,
+			"DefenderServer": defenderServer,
+		})
     })
 
     // Handle form submission
     r.POST("/generate", func(c *gin.Context) {
+		session := sessions.Default(c)
         var formData FormData
         if err := c.ShouldBind(&formData); err != nil {
             c.String(http.StatusBadRequest, "Error binding data: %s", err.Error())
@@ -81,6 +98,12 @@ func main() {
             },
         }
 		
+		session.Set("attacker_name", formData.AttackerName)
+		session.Set("defender_name", formData.DefenderName)
+		session.Set("attacker_server", formData.AttackerServer)
+		session.Set("defender_server", formData.DefenderServer)
+		session.Save()
+
 		log.Println("Request:")
 		log.Println(formData.AttackerName)
 		log.Println(formData.AttackerServer)

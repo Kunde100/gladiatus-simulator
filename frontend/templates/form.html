@@ -15,17 +15,17 @@
     <form action="/generate" method="POST">
         <h2 class="text-2xl font-bold">Attacker</h2>
         <label for="attacker_name">Name:</label>
-        <input class="leading-relaxed rounded-lg" type="text" id="attacker_name" name="attacker_name" required><br>
+		<input class="leading-relaxed rounded-lg" type="text" value="{{.AttackerName}}" id="attacker_name" name="attacker_name" required><br>
 
 
 		<label for="attacker_server">Server Number:</label>
-        <select class="min-w-48 text-center bg-slate-400 rounded-lg" id="attacker_server" name="attacker_server" required><br>
+		<select class="min-w-48 text-center bg-slate-400 rounded-lg" value="{{.AttackerServer}}" id="attacker_server" name="attacker_server" required><br>
 			<option value="50">Server 50</option>
 			<option value="51">Server 51</option>
 			<option value="52">Server 52</option>
 			<option value="53">Server 53</option>
 			<option value="54">Server 54</option>
-			<option value="55">Server 55</option>
+			<option value="55" selected>Server 55</option>
 		</select><br>
 
         <label for="attacker_country">Country:</label>
@@ -37,17 +37,17 @@
 	<div id="defender" class="container mx-auto text-left pl-10">
         <h2 class="text-2xl font-bold">Defender</h2>
         <label for="defender_name">Name:</label>
-        <input class="leading-relaxed rounded-lg" type="text" id="defender_name" name="defender_name" required><br>
+        <input class="leading-relaxed rounded-lg" value="{{.DefenderName}}"type="text" id="defender_name" name="defender_name" required><br>
 
 
 		<label for="defender_server">Server Number:</label>
-		<select class="min-w-48 text-center bg-slate-400 rounded-lg" id="defender_server" name="defender_server" required><br>
+		<select class="min-w-48 text-center bg-slate-400 rounded-lg" id="defender_server" name="defender_server"  required><br>
 			<option value="50">Server 50</option>
 			<option value="51">Server 51</option>
 			<option value="52">Server 52</option>
 			<option value="53">Server 53</option>
 			<option value="54">Server 54</option>
-			<option value="55">Server 55</option>
+			<option value="55" selected>Server 55</option>
 		</select><br>
 
         <label for="defender_country">Country:</label>
