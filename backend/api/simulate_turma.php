@@ -851,4 +851,22 @@
 				return $results;
 		}
 
+
+#$results = turma_arena_simulator(
+#	array(
+#		'country' => 'cz',
+#		'server' => '53',
+#		'name' => 'offmaro',
+#		'id' => null
+#	),
+#	array(
+#		'country' => 'cz',
+#		'server' => '53',
+#		'name' => 'Treskyc',
+#		'id' => null
+#	),
+#	array(
+#		'simulates' => '500'
+#	)
+#);
 echo json_encode($results, JSON_PRETTY_PRINT);
