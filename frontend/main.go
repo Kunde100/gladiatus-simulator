@@ -102,7 +102,7 @@ func main() {
 
 		response := simulateBattle("turma", c, session)
 		parsedResponse := parseResponse(response)
-		c.HTML(http.StatusOK, "response.html", gin.H{
+		c.HTML(http.StatusOK, "turma-response.html", gin.H{
 			"winChance": parsedResponse.WinChance,
 			"loseChance": parsedResponse.LoseChance,
 			"drawChance": parsedResponse.DrawChance,
@@ -118,6 +118,7 @@ func main() {
 func parseResponse(response string) *Response {
 	
 	trimmedResponse := strings.TrimPrefix(response, "null")
+	log.Println("trimmedResponse:", trimmedResponse)
 
 	var apiResponse Response
 	err := json.Unmarshal([]byte(trimmedResponse), &apiResponse)
