@@ -607,7 +607,7 @@
 			}
 
 			// Make a random threat number
-			$selected = rand(0, $threat_sum);
+			$selected = rand(0, (int)$threat_sum);
 
 			// Get selected player
 			foreach ($players as $player){
