@@ -71,74 +71,36 @@ func main() {
 		})
     })
 
+	r.GET("/turma", func(c *gin.Context) {
+		session := sessions.Default(c)
+		attackerName := session.Get("attacker_name")
+		defenderName := session.Get("defender_name")
+		attackerServer := session.Get("attacker_server")
+		defenderServer := session.Get("defender_server")
+		c.HTML(http.StatusOK, "turma.html", gin.H{
+			"AttackerName": attackerName,
+			"DefenderName": defenderName,
+			"AttackerServer": attackerServer,
+			"DefenderServer": defenderServer,
+		})
+	})
     // Handle form submission
     r.POST("/generate", func(c *gin.Context) {
 		session := sessions.Default(c)
-        var formData FormData
-        if err := c.ShouldBind(&formData); err != nil {
-            c.String(http.StatusBadRequest, "Error binding data: %s", err.Error())
-            return
-        }
 
-        // Construct the JSON structure
-        jsonData := map[string]interface{}{
-            "attacker": map[string]interface{}{
-                "country": formData.AttackerCountry,
-                "name":    formData.AttackerName,
-				"server":  formData.AttackerServer,
-            },
-            "defender": map[string]interface{}{
-                "country": formData.DefenderCountry,
-                "name":    formData.DefenderName,
-				"server":  formData.DefenderServer,
-            },
-            "options": map[string]interface{}{
-                "life-mode": formData.LifeMode,
-                "simulates": "1000",
-            },
-        }
-		
-		session.Set("attacker_name", formData.AttackerName)
-		session.Set("defender_name", formData.DefenderName)
-		session.Set("attacker_server", formData.AttackerServer)
-		session.Set("defender_server", formData.DefenderServer)
-		session.Save()
+		response := simulateBattle("arena", c, session)
+		parsedResponse := parseResponse(response)
+		c.HTML(http.StatusOK, "response.html", gin.H{
+			"winChance": parsedResponse.WinChance,
+			"loseChance": parsedResponse.LoseChance,
+			"drawChance": parsedResponse.DrawChance,
+		})
+    })
 
-		log.Println("Request:")
-		log.Println(formData.AttackerName)
-		log.Println(formData.AttackerServer)
-		log.Println(formData.DefenderName)
-		log.Println(formData.DefenderServer)
+	r.POST("/generate-turma", func(c *gin.Context) {
+		session := sessions.Default(c)
 
-		jsonBytes, err := json.Marshal(jsonData)
-		if err != nil {
-			c.String(http.StatusInternalServerError, "Error marshalling JSON: %s", err.Error())
-			return
-		}
-		
-		url := "http://localhost:8080"
-	    envUrl, exists := os.LookupEnv("BACKEND_URL")
-	    if exists {
-	        url = envUrl
-	    }
-		resp, err := http.Post(url+"/api.php", "application/json", bytes.NewBuffer(jsonBytes))
-		if err != nil {
-			c.String(http.StatusInternalServerError, "Error calling API: %s", err.Error())
-			return
-			}
-		defer resp.Body.Close()
-
-		var responseBody bytes.Buffer
-		_, err = responseBody.ReadFrom(resp.Body)
-		if err != nil {
-			c.String(http.StatusInternalServerError, "Error reading response body: %s", err.Error())
-			return
-
-		}
-		var response string
-		response = responseBody.String()
-		log.Println("Full response: ", response)
-
+		response := simulateBattle("turma", c, session)
 		parsedResponse := parseResponse(response)
 		c.HTML(http.StatusOK, "response.html", gin.H{
 			"winChance": parsedResponse.WinChance,
@@ -170,5 +132,71 @@ func parseResponse(response string) *Response {
 	return &apiResponse
 }
 
+func simulateBattle(mode string, c *gin.Context, s sessions.Session) (response string) {
+        var formData FormData
+        if err := c.ShouldBind(&formData); err != nil {
+            c.String(http.StatusBadRequest, "Error binding data: %s", err.Error())
+            return
+        }
 
+        // Construct the JSON structure
+        jsonData := map[string]interface{}{
+            "attacker": map[string]interface{}{
+                "country": formData.AttackerCountry,
+                "name":    formData.AttackerName,
+				"server":  formData.AttackerServer,
+            },
+            "defender": map[string]interface{}{
+                "country": formData.DefenderCountry,
+                "name":    formData.DefenderName,
+				"server":  formData.DefenderServer,
+            },
+            "options": map[string]interface{}{
+                "life-mode": formData.LifeMode,
+                "simulates": "1000",
+            },
+        }
+		
+		s.Set("attacker_name", formData.AttackerName)
+		s.Set("defender_name", formData.DefenderName)
+		s.Set("attacker_server", formData.AttackerServer)
+		s.Set("defender_server", formData.DefenderServer)
+		s.Save()
 
+		log.Println("Request:")
+		log.Println(formData.AttackerName)
+		log.Println(formData.AttackerServer)
+		log.Println(formData.DefenderName)
+		log.Println(formData.DefenderServer)
+
+		jsonBytes, err := json.Marshal(jsonData)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error marshalling JSON: %s", err.Error())
+			return
+		}
+		
+		url := "http://localhost:8080"
+	    envUrl, exists := os.LookupEnv("BACKEND_URL")
+	    if exists {
+	        url = envUrl
+	    }
+		path := "/" + mode + ".php"
+		resp, err := http.Post(url+path, "application/json", bytes.NewBuffer(jsonBytes))
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error calling API: %s", err.Error())
+			return
+			}
+		defer resp.Body.Close()
+
+		var responseBody bytes.Buffer
+		_, err = responseBody.ReadFrom(resp.Body)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error reading response body: %s", err.Error())
+			return
+
+		}
+		response = responseBody.String()
+		log.Println("Full response: ", response)
+
+		return response
+	}
