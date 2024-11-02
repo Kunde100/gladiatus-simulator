@@ -56,14 +56,18 @@ func main() {
 
 	r.Static("/assets", "./assets") 
 
-    // Serve the form
-    r.GET("/", func(c *gin.Context) {
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{
+		})
+	})
+
+    r.GET("/arena", func(c *gin.Context) {
 		session := sessions.Default(c)
 		attackerName := session.Get("attacker_name")
 		defenderName := session.Get("defender_name")
 		attackerServer := session.Get("attacker_server")
 		defenderServer := session.Get("defender_server")
-        c.HTML(http.StatusOK, "form.html", gin.H{
+        c.HTML(http.StatusOK, "arena.html", gin.H{
 			"AttackerName": attackerName,
 			"DefenderName": defenderName,
 			"AttackerServer": attackerServer,
