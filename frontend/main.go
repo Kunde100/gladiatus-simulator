@@ -99,6 +99,13 @@ func main() {
 		session := sessions.Default(c)
 
 		response := simulateBattle("turma", c, session)
+		if strings.Contains(response, "error") {
+			reponse := parseError(response)
+			c.HTML(http.StatusOK, "error.html", gin.H{
+				"message": reponse.Message,
+			})
+			return
+		}
 		parsedResponse := parseResponse(response)
 		c.HTML(http.StatusOK, "response.html", gin.H{
 			"winChance":  parsedResponse.WinChance,
