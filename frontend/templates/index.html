@@ -9,14 +9,72 @@
 </head>
 <body class="bg-slate-200 leading-loose space-y-10 flex flex-col h-full">
     <h1 class="text-4xl font-bold text-center">Gladiatus Simulator</h1>
-	<div class="grid grid-cols-2 gap-4 ">
-		<div id="arena" class="container mx-auto text-right pr-10">
-			<a href="/arena" class="text-slate-950 bg-amber-300 hover:bg-amber-400 rounded-full py-2 px-4">Arena Simulator</a>
+
+    <form id="simulationForm" action="" method="POST" class="grid grid-cols-2 gap-4">
+	<div id="attacker" class="container mx-auto text-right">
+        <h2 class="text-2xl font-bold">Attacker</h2>
+        <label for="attacker_name">Name:</label>
+		<input class="leading-relaxed rounded-lg" type="text" value="{{.AttackerName}}" id="attacker_name" name="attacker_name" required><br>
+
+
+		<label for="attacker_server">Server Number:</label>
+		<select class="min-w-48 text-center bg-slate-400 rounded-lg" value="{{.AttackerServer}}" id="attacker_server" name="attacker_server" required><br>
+			<option value="50">Server 50</option>
+			<option value="51">Server 51</option>
+			<option value="52">Server 52</option>
+			<option value="53">Server 53</option>
+			<option value="54">Server 54</option>
+			<option value="55" selected>Server 55</option>
+		</select><br>
+
+        <label for="attacker_country">Country:</label>
+        <select class="bg-slate-400 min-w-12 text-center rounded-lg" id="attacker_country" name="attacker_country" required><br>
+			<option value="cz">cz</option>
+		</select><br>
+	</div>
+
+	<div id="defender" class="container mx-auto text-left ">
+        <h2 class="text-2xl font-bold">Defender</h2>
+        <label for="defender_name">Name:</label>
+        <input class="leading-relaxed rounded-lg" value="{{.DefenderName}}"type="text" id="defender_name" name="defender_name" required><br>
+
+
+		<label for="defender_server">Server Number:</label>
+		<select class="min-w-48 text-center bg-slate-400 rounded-lg" id="defender_server" name="defender_server"  required><br>
+			<option value="50">Server 50</option>
+			<option value="51">Server 51</option>
+			<option value="52">Server 52</option>
+			<option value="53">Server 53</option>
+			<option value="54">Server 54</option>
+			<option value="55" selected>Server 55</option>
+		</select><br>
+
+        <label for="defender_country">Country:</label>
+		<select class="bg-slate-400 min-w-12 text-center rounded-lg" id="defender_country" name="defender_country" required><br>
+			<option value="cz">cz</option>
+		</select><br>
+	</div>
+	</form>
+
+	<div id="misc" class="container mx-auto text-center">
+	<div id="options" class="container mx-auto">
+        <h2 class="text-2xl font-bold">Options</h2>
+        <label for="life_mode">Life Mode:</label>
+        <select class="bg-slate-400 rounded-lg" id="life_mode" name="life_mode" required><br>
+			<option value="current">current</option>
+			<option value="full">full</option>
+		</select><br>
+	</div>
+	</div>
+	<div class="grid grid-cols-2 gap-4">
+		<div id="button" class="container mx-auto text-right pr-10 ">
+        	<button class="text-slate-950 bg-amber-300 hover:bg-amber-400 rounded-full py-2 px-4" type="button" onclick="submitForm('/generate')">Simulate Arena</button>
 		</div>
-		<div id="turma" class="container mx-auto text-left pl-10">
-			<a href="/turma" class="text-slate-950 bg-amber-300 hover:bg-amber-400 rounded-full py-2 px-4">Turma Simulator</a>
+		<div id="button" class="container mx-auto text-left pl-10 ">
+  	      <button class="text-slate-950 bg-amber-300 hover:bg-amber-400 rounded-full py-2 px-4" type="button" onclick="submitForm('/generate-turma')">Simulate Turma</button>
 		</div>
 	</div>
+
 <footer class="bg-slate-200 shadow border">
     <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
 		<span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">Made by <a href="https://github.com/kyrbrbik" class="hover:underline">kyrbrbik</a>. </br> All Rights Reserved. View code on <a href="https://github.com/Kunde100/gladiatus-simulator" class="hover:underline">github</a>
@@ -25,6 +83,13 @@
     </div>
 </footer>
 
+<script>
+	function submitForm(url) {
+		var form = document.getElementById("simulationForm");
+		form.action = url;
+		form.submit();
+	}
+</script>
 </body>
 </html>
 
