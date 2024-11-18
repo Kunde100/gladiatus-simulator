@@ -33,6 +33,11 @@ type Response struct {
 	Details    Details `json:"details"`
 }
 
+type ErrorResponse struct {
+	Error bool   `json:"error"`
+	Message string `json:"message"`
+}
+
 type Details struct {
 	Fights int `json:"fights"`
 	Wins   int `json:"wins"`
@@ -75,6 +80,13 @@ func main() {
 		session := sessions.Default(c)
 
 		response := simulateBattle("arena", c, session)
+		if strings.Contains(response, "error") {
+			reponse := parseError(response)
+			c.HTML(http.StatusOK, "error.html", gin.H{
+				"message": reponse.Message,
+			})
+			return
+		}
 		parsedResponse := parseResponse(response)
 		c.HTML(http.StatusOK, "response.html", gin.H{
 			"winChance":  parsedResponse.WinChance,
@@ -117,6 +129,22 @@ func parseResponse(response string) *Response {
 
 	return &apiResponse
 }
+
+func parseError(response string) *ErrorResponse {
+
+	trimmedResponse := strings.TrimPrefix(response, "null")
+	log.Println("trimmedResponse", trimmedResponse)
+
+	var apiResponse ErrorResponse
+
+	err := json.Unmarshal([]byte(trimmedResponse), &apiResponse)
+	if err != nil {
+		log.Println("Error unmarshaling json:", err)
+	}
+
+	return &apiResponse
+}
+
 
 func simulateBattle(mode string, c *gin.Context, s sessions.Session) (response string) {
 	var formData FormData
@@ -188,5 +216,8 @@ func simulateBattle(mode string, c *gin.Context, s sessions.Session) (response s
 	response = responseBody.String()
 	log.Println("Full response: ", response)
 
+	if strings.Contains(response, "error") {
+		return response
+	}
 	return response
 }
